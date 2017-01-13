@@ -1,0 +1,12 @@
+## IDE
+.project
+
+## PROJECT
+Gemfile.lock
+
+## gEDIT
+*~
+
+## RVM
+.ruby-version
+.ruby-gemset
