@@ -1,0 +1,22 @@
+===========Authenticating to Coolpay API...
+>>>>>>response.body='{"token":"46ecdc57-9c78-43f6-b50e-f7e27c9b5744"}'
+CoolPay.id = kamran
+CoolPay.api_key = C812E5BEC4E315C9
+CoolPay.token = 46ecdc57-9c78-43f6-b50e-f7e27c9b5744
+===========Adding recipients...
+>>>>>response.body='{"recipient":{"name":"Ben Barker","id":"0ff7da68-fb40-4bd5-8ea7-85b36be95319"}}'
+ben.id=0ff7da68-fb40-4bd5-8ea7-85b36be95319
+ben.name=Ben Barker
+>>>>>response.body={"recipient":{"name":"Selina Linton","id":"15a50f50-c6a1-4927-8434-4a116cd6114d"}}
+selina.id=15a50f50-c6a1-4927-8434-4a116cd6114d
+selina.name=Selina Linton
+===========Send them money...
+>>>>>response.body='{"payment":{"status":"processing","recipient_id":"0ff7da68-fb40-4bd5-8ea7-85b36be95319","id":"2869f6e9-54f0-4ede-9e87-9090327f8643","currency":"GBP","amount":"10.5"}}'
+payment.id=2869f6e9-54f0-4ede-9e87-9090327f8643
+payment.amount=10.5
+payment.currency=GBP
+payment.recipient_id=0ff7da68-fb40-4bd5-8ea7-85b36be95319
+payment.status=processing
+===========Check whether a payment was successful...
+payment.status=processing
+

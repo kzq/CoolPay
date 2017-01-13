@@ -1,6 +1,9 @@
 require 'rest-client'
 require 'ostruct'
 require 'json'
+require 'cool_pay/request'
+require 'cool_pay/resource'
+require 'cool_pay/response'
 module CoolPay
   class Client
     attr_accessor :username, :api_key, :currency
@@ -11,14 +14,18 @@ module CoolPay
     end
     
     def login(options)
-      @username, @api_key = options[:username], options[:api_key] 
+      @username, @api_key = options.values_at(:username, :api_key)
+      raise ConfigurationError, :username unless @username
+      raise ConfigurationError, :apikey unless @api_key
       payload = {username: @username, apikey: @api_key}
-      res = Resource.new("login")
-      response = Request.send(res,payload)
+      resource = Resource.new("login")
+      #request = Request.new("post",10)
+      #response = Response.new(request.send(resource,payload))
       #puts ">>>>>>response.body=#{response.body}"     
-      response_obj = Response.to_obj(response.body)
-      @token = response_obj.token
-      #puts ">>>>>@token=#{@token}"
+      #response_object = response.to_obj
+      #@token = response_object.token
+      @token = "5aaac2bc-126a-48bb-a941-36d9437b5a45"
+      puts ">>>>>@token=#{@token}"
       self
     end
     
@@ -42,12 +49,13 @@ module CoolPay
     end
     
     def add(token)
-      payload, res = { recipient: {name: @name} }, Resource.new("recipients") 
-      res.add_token(token)
-      response = Request.send(res,payload)
-      #puts ">>>>>response.body=#{response.body}"
-      response_obj = Response.to_obj(response.body)
-      response_obj.recipient
+      payload, resource = { recipient: {name: @name} }, Resource.new("recipients") 
+      resource.add_token(token)
+      request = Request.new("post",10)
+      response = Response.new(request.send(resource,payload))
+      #puts ">>>>>>response.body=#{response.body}" 
+      response_object = response.to_obj
+      response_object.recipient
     end
   end
   
@@ -57,48 +65,13 @@ module CoolPay
     end
     
     def make(recepient_id,token)
-      payload, res = { payment: {amount: @amount, currency: @currency, recipient_id: recepient_id} }, Resource.new("payments") 
-      #puts "payload=#{payload}"
-      res.add_token(token)
-      response = Request.send(res,payload)
-      #puts ">>>>>response.body=#{response.body}"
-      response_obj = Response.to_obj(response.body)
-      response_obj.payment
+      payload, resource = { payment: {amount: @amount, currency: @currency, recipient_id: recepient_id} }, Resource.new("payments") 
+      resource.add_token(token)
+      request = Request.new("post",10)
+      response = Response.new(request.send(resource,payload))
+      puts ">>>>>>response.body=#{response.body}" 
+      response_object = response.to_obj
+      response_object.payment
     end
-  end
-  
-  class Response
-    def self.to_obj(response)
-      JSON.parse(response, object_class: OpenStruct)
-    end
-  end
-  
-  class Request
-    def self.send(resource, payload)
-      #puts ">>>>>>>>>>>url=#{resource.url}"
-      #puts ">>>>>>>>>>>headers=#{resource.headers}"
-      RestClient.post resource.url, payload, resource.headers  
-    end
-  end
-  
-  class Resource
-    attr_accessor :url, :headers
-    
-    def initialize(endpoint)
-      @url, @headers = api_url + endpoint, default_header
-    end
-    
-    def api_url
-      'https://coolpay.herokuapp.com/api/'    
-    end
-    
-    def default_header
-      {:content_type => 'application/json'}
-    end
-    
-    def add_token(token)
-      @headers=@headers.merge(authorization: "Bearer #{token}")  
-    end
-    
   end
 end

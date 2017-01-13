@@ -15,19 +15,21 @@ puts "CoolPay.token = #{CoolPay.token}"
 
 puts "===========Adding recipients..."
 
-ben=CoolPay.add_recipient("Ben Barker")
-puts "ben.id=#{ben.id}"
-puts "ben.name=#{ben.name}"
+#ben=CoolPay.add_recipient("Ben Barker")
+#puts "ben.id=#{ben.id}"
+#puts "ben.name=#{ben.name}"
 
-selina=CoolPay.add_recipient("Selina Linton")
-puts "selina.id=#{selina.id}"
-puts "selina.name=#{selina.name}"
+#selina=CoolPay.add_recipient("Selina Linton")
+#puts "selina.id=#{selina.id}"
+#puts "selina.name=#{selina.name}"
 
 
 puts "===========Send them money..."
 
-payment = CoolPay.make_payment("10.5",ben.id)
-#payment = CoolPay.make_payment(10.5,"51aada7c-24d7-4636-971f-f47e2afd714f")
+#payment = CoolPay.make_payment("10.5",ben.id)
+
+payment = CoolPay.make_payment("10.5","6d6f41ea-909d-4a47-b2a5-822640aecd07")
+
 puts "payment.id=#{payment.id}"
 puts "payment.amount=#{payment.amount}"
 puts "payment.currency=#{payment.currency}"
