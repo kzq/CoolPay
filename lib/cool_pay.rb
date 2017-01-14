@@ -11,8 +11,7 @@ module CoolPay
       super "missing key #{key}"
     end
   end
-  class HTTPError < Error; attr_accessor :original_error; end 
-
+  
   class << self
     extend Forwardable
     

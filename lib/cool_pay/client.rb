@@ -9,7 +9,7 @@ module CoolPay
     attr_accessor :username, :api_key, :currency
     attr_reader :token
     
-    def initialze
+    def initialize
       @currency = "GBP"
     end
     
@@ -17,26 +17,23 @@ module CoolPay
       @username, @api_key = options.values_at(:username, :api_key)
       raise ConfigurationError, :username unless @username
       raise ConfigurationError, :apikey unless @api_key
-      payload = {username: @username, apikey: @api_key}
+      values = {username: @username, apikey: @api_key}
       resource = Resource.new("login")
-      #request = Request.new("post",10)
-      #response = Response.new(request.send(resource,payload))
-      #puts ">>>>>>response.body=#{response.body}"     
-      #response_object = response.to_obj
-      #@token = response_object.token
-      @token = "5aaac2bc-126a-48bb-a941-36d9437b5a45"
-      puts ">>>>>@token=#{@token}"
+      request = Request.new(10)
+      response = Response.new(request.send(resource,values))
+      response_object = response.to_obj
+      @token = response_object.token
       self
-    end
-    
-    def make_payment(amount,recepient_id)
-      payment = Payment.new(amount,@currency)
-      payment.make(recepient_id,@token)    
     end
     
     def add_recipient(name)
       recipient = Recipient.new(name)
       recipient.add(@token)
+    end
+    
+    def make_payment(amount,recepient_id)
+      payment = Payment.new(amount,@currency)
+      payment.make(recepient_id,@token)    
     end
   end
   
@@ -49,11 +46,10 @@ module CoolPay
     end
     
     def add(token)
-      payload, resource = { recipient: {name: @name} }, Resource.new("recipients") 
+      values, resource = { recipient: {name: @name} }, Resource.new("recipients") 
       resource.add_token(token)
-      request = Request.new("post",10)
-      response = Response.new(request.send(resource,payload))
-      #puts ">>>>>>response.body=#{response.body}" 
+      request = Request.new(10)
+      response = Response.new(request.send(resource,values))
       response_object = response.to_obj
       response_object.recipient
     end
@@ -65,11 +61,10 @@ module CoolPay
     end
     
     def make(recepient_id,token)
-      payload, resource = { payment: {amount: @amount, currency: @currency, recipient_id: recepient_id} }, Resource.new("payments") 
+      values, resource = { payment: {amount: @amount, currency: @currency, recipient_id: recepient_id} }, Resource.new("payments") 
       resource.add_token(token)
-      request = Request.new("post",10)
-      response = Response.new(request.send(resource,payload))
-      puts ">>>>>>response.body=#{response.body}" 
+      request = Request.new(10)
+      response = Response.new(request.send(resource,values))
       response_object = response.to_obj
       response_object.payment
     end

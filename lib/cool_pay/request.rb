@@ -1,14 +1,11 @@
 module CoolPay
   class Request
-    def initialize(method,timeout)
-      @method, @timeout = method, timeout 
+    def initialize(timeout)
+      @timeout = timeout 
     end
-    def send(resource, payload)
-      puts ">>>>>>>>>>>url=#{resource.url}"
-      puts ">>>>>>>>>>>headers=#{resource.headers}"
+    def send(resource, values)
       begin
-        RestClient::Request.execute(method: @method.to_sym, url: resource.url, headers: resource.headers, payload: payload, timeout: @timeout)
-        #RestClient.post resource.url, payload, resource.headers
+        RestClient.post resource.url, values.to_json, resource.headers
       rescue => e
         response = e.response
         handle_status_code(response.code,response.body)

@@ -3,7 +3,9 @@ module CoolPay
     attr_reader :body, :code, :headers
     
     def initialize(response)
-      @body, @code, @headers= response.body, response.code, response.headers     
+      @body, @code, @headers= response.body, response.code, response.headers
+      puts ">>>>>>>>>>response=#{response}"     
+      puts ">>>>>>>>>>response body=#{@body}"
     end
     
     def to_obj
