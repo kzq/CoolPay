@@ -1,7 +1,4 @@
-#TO DO
-# status codes, erros, tests, timeout
-
-load 'lib/cool_pay.rb'
+  load 'lib/cool_pay.rb'
 
 puts "===========Authenticating to Coolpay API..."
 
